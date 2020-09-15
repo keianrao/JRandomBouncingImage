@@ -1,3 +1,25 @@
+/* copyright
+*
+* JRandomBouncingImage - Java clone of Common Desktop Environment
+* 'Random bouncing image' screensaver
+* (C) 2020 Keian Rao
+*
+* This program is free software: you can redistribute it and/or 
+* modify it under the terms of the GNU General Public License as
+* published by the Free Software Foundation, either version 3 of 
+* the License, or (at * your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see
+* <https://www.gnu.org/licenses/>.
+*
+copyright */
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -58,8 +80,7 @@ private class Pane extends JPanel implements ActionListener {
 		int xOffset = (getWidth() % gridWidth) / 2;
 		int yOffset = (getHeight() % gridHeight) / 2;
 		
-		int bouncingsToGenerate = gridColumns + gridRows;
-		// Arbitrary. I haven't researched the actual algorithm		
+		int bouncingsToGenerate = (gridColumns + gridRows) / 3;
 		Bouncing[] bouncings = new Bouncing[bouncingsToGenerate];
 		while (bouncingsToGenerate-- > 0) {
 			bouncings[bouncingsToGenerate] = 
@@ -83,9 +104,9 @@ private class Pane extends JPanel implements ActionListener {
 			// Draw the image itself.
 			gBuf.drawImage(image, normalX, normalY, this);
 			
-			// Now fill a coloured rect with SrcIn. Aside from
-			// the drawn image, the buffer should be empty pixels (alpha 0),
-			// so this should work.
+			// Now fill a coloured rect with SrcIn. 
+			// The destination area, aside from the image drawn earlier,
+			// should be empty pixels (alpha 0) - so this should work.
 			g2Buf.setComposite(AlphaComposite.SrcIn);
 			g2Buf.setColor(bouncing.colour);
 			g2Buf.fillRect(
@@ -119,6 +140,8 @@ private static class Bouncing {
 //  Constructors    \\  //  \\  //  \\  //  \\
 
 private JRandomBouncingImage() {
+	super("Random bouncing image");
+
 	// Some of our properties first..
 	setBackground(Color.BLACK);
 
@@ -169,17 +192,17 @@ private JRandomBouncingImage() {
 	image = toolkit.createImage(imageURL);
 	
 	// Set colours.
-	colours = new Color[8];
-	for (int o = 0; o < colours.length; ++o) {
-		colours[o] = new Color(
-			randomInteger(128, 192),
-			randomInteger(128, 192),
-			randomInteger(128, 192)
-		);
-	}
+	colours = new Color[] {
+		new Color(255, 192, 192),
+		new Color(255, 192, 255),
+		new Color(255, 255, 192),
+		new Color(192, 255, 192),
+		new Color(192, 255, 255),
+		new Color(192, 192, 255)
+	};
 	
 	// Now start a timer.
-	Timer timer = new Timer(3000, pane);	
+	Timer timer = new Timer(3000, pane);
 	timer.start();
 }
 
